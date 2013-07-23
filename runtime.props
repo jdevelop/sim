@@ -1,0 +1,27 @@
+xml-rpc.port=2003
+driver=org.gjt.mm.mysql.Driver
+dbprovider=mysql
+dbhost=localhost
+dbport=3306
+dbname=sim?autoReconnect=true&characterEncoding=KOI8_R&useUnicode=true
+dbuser=root
+dbpassword=
+AUTH_TABLE_NAME=auth
+AUTH_TABLE_LOGIN=login
+AUTH_TABLE_PASSWORD=password
+AUTH_TABLE_ID=id
+PROFILE_TABLE_NAME=auth
+PROFILE_TABLE_USERNAME=login
+PROFILE_TABLE_ID=id
+PROFILE_TABLE_SEX=1
+PROFILE_TABLE_AGE=' '
+PROFILE_TABLE_PAID=1
+IGNORE_TABLE_NAME=ignored
+IGNORE_TABLE_IGNORE=ignored
+IGNORE_TABLE_UID=id
+BUDDY_TABLE_NAME=friends
+BUDDY_TABLE_ID=id
+BUDDY_TABLE_BUDDY=target
+timeout=2
+initial_timeout=5
+acceptedHosts=jdevelop.com,sim.priv

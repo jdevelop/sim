@@ -1,0 +1,664 @@
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
+\textclass article
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize a4paper
+\paperpackage widemarginsa4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+
+Site Instant Messenger 4.4.1 installation instructions
+\layout Author
+
+Eugeny N Dzhurinsky, JDevelop.com, 2003-2004
+\layout Section
+
+Pre-requirements
+\layout Standard
+
+You will need JDK 1.3.1 or higher to install and launch the IM server.
+ You may obtain JDK from http://java.sun.com/downloads/ - just choose your
+ operating system and click appropriate download link.
+\layout Section
+
+Package contains
+\layout Enumerate
+
+
+\series bold 
+Server package
+\begin_deeper 
+\layout Enumerate
+
+server.jar - this file contains IM server.
+\layout Enumerate
+
+mysql.jar - the JDBC driver to use 
+\series bold 
+MySQL
+\series default 
+ database with the 
+\series bold 
+IM
+\series default 
+ (however, this should be replaced with appropriate JDBC driver for database
+ you are using with your WEB-site)
+\layout Enumerate
+
+xmlrpc.jar - this library allows to use 
+\series bold 
+XML-RPC
+\series default 
+ protocol to access IM server methods
+\layout Enumerate
+
+runtime.props - the main server configuration file
+\layout Enumerate
+
+serverstart.sh - shell script to start server
+\layout Enumerate
+
+recycle.sh - cron job to auto-restart server if it goes down for some reason.
+ This script uses 
+\series bold 
+serverstart.sh
+\series default 
+ to start server
+\layout Enumerate
+
+
+\series bold 
+wrapper
+\series default 
+.
+\series bold 
+cgi
+\series default 
+ or
+\series bold 
+ wrapper.php
+\series default 
+ - script, which wraps the IM protocol in HTTP requests.
+ This feature allows to use instant messenger for customersm which are located
+ behind firewalls or proxy servers.
+\end_deeper 
+\layout Enumerate
+
+
+\series bold 
+Client package
+\begin_deeper 
+\layout Enumerate
+
+client.jar - tthis file contains the IM client applet
+\layout Enumerate
+
+skin.jar or skin.zip - the skin file to use with messenger
+\layout Enumerate
+
+applet.php - sample PHP page, which contains the sample applet tag
+\layout Enumerate
+
+banner.php - sample PHP page for banner display
+\end_deeper 
+\layout Section
+
+IM Server configuration
+\layout Standard
+
+The IM server configuration is located in the 
+\series bold 
+runtime.props
+\series default 
+ file.
+ This file has set of configuration options for database, timeouts etc.
+\newline 
+There is the description of options below:
+\layout Itemize
+
+
+\series bold 
+xml-rpc.port
+\series default 
+ - port, on which XML-RPC module listing for the requests
+\layout Itemize
+
+
+\series bold 
+driver
+\series default 
+ - name of JDBC driver (
+\color red
+don't change if you not sure what are you doing
+\color default
+)
+\layout Itemize
+
+
+\series bold 
+dbprovider
+\series default 
+ - name of using RDBMS (
+\color red
+don't change if you not sure what are you doing
+\color default
+)
+\layout Itemize
+
+
+\series bold 
+dbhost
+\series default 
+ - host of the database server
+\layout Itemize
+
+
+\series bold 
+dbport
+\series default 
+ - port of database server
+\layout Itemize
+
+
+\series bold 
+dbname
+\series default 
+ - name of the database to connect
+\layout Itemize
+
+
+\series bold 
+dbuser
+\series default 
+ - username to access database
+\layout Itemize
+
+
+\series bold 
+dbpassword
+\series default 
+ - password to access database
+\layout Itemize
+
+
+\series bold 
+AUTH_TABLE_NAME
+\series default 
+ - name of table, where IM server will look for username and and password
+\layout Itemize
+
+
+\series bold 
+AUTH_TABLE_LOGIN
+\series default 
+ - name of field in 
+\series bold 
+AUTH_TABLE_NAME
+\series default 
+ table, which holds username
+\layout Itemize
+
+
+\series bold 
+AUTH_TABLE_PASSWORD
+\series default 
+ - name of field in 
+\series bold 
+AUTH_TABLE_NAME
+\series default 
+ which holds the password of user
+\layout Itemize
+
+
+\series bold 
+AUTH_TABLE_ID
+\series default 
+ - name of field, which contains unique user ID (may have numeric or string
+ type)
+\layout Itemize
+
+
+\series bold 
+PROFILE_TABLE_NAME
+\series default 
+ - name of table, which holds profile for users
+\layout Itemize
+
+
+\series bold 
+PROFILE_TABLE_USERNAME
+\series default 
+ - name of field, which holds the username to display.
+ In this parameter you can use SQL statements, like concat(firstname,' ',lastnam
+e) to get complicated usernames from several fields
+\layout Itemize
+
+
+\series bold 
+PROFILE_TABLE_ID
+\series default 
+ - user ID field name.
+ This is used as foreign key to table 
+\series bold 
+AUTH_TABLE_NAME
+\series default 
+.
+\layout Itemize
+
+
+\series bold 
+PROFILE_TABLE_SEX
+\series default 
+ - name of the field, which contains gender information.
+ 1 means male, any other value - female.
+ You can use the SQL statements like if(gender='male',1,2) as value for
+ this parameter.
+\layout Itemize
+
+
+\series bold 
+PROFILE_TABLE_AGE
+\series default 
+ - optional information, which is used to provide additional information,
+ like age of user, or state, or something else.
+ You can use SQL statements here as well.
+\layout Itemize
+
+
+\series bold 
+PROFILE_TABLE_PAID
+\series default 
+ - field name, which shows if user is paid member and can start chat.
+ Users with value 1 can start chat, users with any other value only can
+ accept chat, can't to initiate it by theirselves.
+ You can use the SQL statements here.
+\layout Itemize
+
+
+\series bold 
+IGNORE_TABLE_NAME
+\series default 
+ - name of table, where blocked list for user is stored.
+\layout Itemize
+
+
+\series bold 
+IGNORE_TABLE_UID
+\series default 
+ - the ID of user.
+ This is foreign key to 
+\series bold 
+AUTH_TABLE_NAME
+\series default 
+.
+\layout Itemize
+
+
+\series bold 
+IGNORE_TABLE_IGNORED
+\series default 
+ - name of field, which contains list of IDs for ignored users, separated
+ by commas.
+ This field must have type of VARCHAR, but MEDIUMTEXT is even better.
+\layout Itemize
+
+
+\series bold 
+BUDDY_TABLE_NAME
+\series default 
+ (
+\color red
+optional
+\color default
+) - name of table, where buddy list is stored.
+\layout Itemize
+
+
+\series bold 
+BUDDY_TABLE_ID
+\series default 
+ (
+\color red
+optional
+\color default
+) - name of field, which contains ID of user.
+ This is foreign key for 
+\series bold 
+AUTH_TABLE_NAME
+\series default 
+.
+\layout Itemize
+
+
+\series bold 
+BUDDY_TABLE_BUDDY
+\series default 
+ (
+\color red
+optional
+\color default
+) - ID of buddy, foreign key for 
+\series bold 
+AUTH_TABLE_NAME
+\layout Itemize
+
+
+\series bold 
+timeout
+\series default 
+ - parameter, which defines the timeout*30 seconds, after which user will
+ be logged out if he didn't send any requests to a server (no requests for
+ new messages, no requests for buddy list and no requests for sending new
+ message)
+\layout Itemize
+
+
+\series bold 
+initial_timeout
+\series default 
+ - timeout value which user gets once he's logged in.
+\layout Itemize
+
+
+\series bold 
+acceptedHosts
+\series default 
+ - parameter, which controls hosts names, where applet can be integrated
+ in the page.
+ Names of hosts separated by ',' , ' ' , ';' .
+ This will avoid usage of your messenger client on another site, if you
+ didn't specify this site in the list of accepted hosts.
+\layout Standard
+
+Now about the 
+\series bold 
+recycle.sh.
+ 
+\series default 
+You will need to change the 
+\series bold 
+SIM_HOME
+\series default 
+ variable so it will point to directory, where 
+\series bold 
+recycle.sh
+\series default 
+ is located, and 
+\series bold 
+PORT
+\series default 
+ variable, which defines port on which IM server will be started.
+\layout Section
+
+IM client configuration.
+\layout Standard
+
+Take a look at the 
+\series bold 
+applet.php
+\series default 
+ file, parameters for Java applet you will find there are described below:
+\layout Enumerate
+
+
+\series bold 
+login
+\series default 
+ - username of current user
+\layout Enumerate
+
+
+\series bold 
+password
+\series default 
+ - password for current user
+\layout Enumerate
+
+
+\series bold 
+port
+\series default 
+ - port where IM server is configured.
+ Used when direct connections client<->server are used.
+\layout Enumerate
+
+
+\series bold 
+prefix
+\series default 
+ - 
+\series bold 
+relative
+\series default 
+ URL of the wrapper script on your server (it should start with slash and
+ point to file from 
+\series bold 
+root
+\series default 
+ of your web-server, for instance - /im/wrapper.php.
+ Consider this as relative link to file on your server, like 
+\series bold 
+http://server.comn/im/wrapper.php
+\series default 
+)
+\layout Enumerate
+
+
+\series bold 
+profileURL
+\series default 
+ - absolute URL to script, which returns name of user image.
+ This script have to return single line, like this
+\newline 
+
+\series bold 
+http://yourserver.com/images/profile/userimage.jpg
+\series default 
+
+\newline 
+In this case applet will get the image from server and include it in chat
+ window.
+\layout Enumerate
+
+
+\series bold 
+bannersURL
+\series default 
+ - absolute URL to be used for invoking script to retrieve current banner
+ to show
+\layout Enumerate
+
+
+\series bold 
+bannersTimeout
+\series default 
+ - delay in seconds between rotating banners
+\layout Enumerate
+
+
+\series bold 
+bannersBackground
+\series default 
+ - background color to show if no banner is in the system or image failed
+ to load.
+\layout Standard
+
+
+\series bold 
+\color red
+NOTE: all the banner pictures must be on the SAME server, where IM server
+ is running, because applet will not be able to connect to any other server
+ - it is prohibited by the JVM.
+\newline 
+
+\color black
+Sample script for banners:
+\newline 
+
+\newline 
+
+\series default 
+\color default
+<?php 
+\layout Standard
+
+header('Content-type: text/plain'); 
+\layout Standard
+
+// sending the URL
+\layout Standard
+
+echo 'http://jdevelop.com/sim'."
+\backslash 
+n"; 
+\layout Standard
+
+//sending the image URL
+\layout Standard
+
+echo 'http://simv4.priv/jdevelopbanner.jpg'."
+\backslash 
+n"; 
+\newline 
+?> 
+\newline 
+
+\layout Standard
+
+Now about 
+\series bold 
+skin.zip
+\series default 
+ file.
+ This file contains skin.
+ Skin is set of images, sounds, and it has it's own configuration file called
+ 
+\series bold 
+layout.conf
+\series default 
+.
+ Most of parameters there are self-explaining, but several are not.
+ Here is the list:
+\layout Itemize
+
+
+\series bold 
+smileys_per_row
+\series default 
+ - defines how many smiles will be shown per row in a dropdown list for
+ smiles.
+\layout Itemize
+
+
+\series bold 
+buddiesPerRow
+\series default 
+ - defines how many columns will have buddy list
+\layout Itemize
+
+
+\series bold 
+profileURL
+\series default 
+ - URL, which will be opened when user icon in buddy list or user image
+ in message window will be clicked.
+ This URL will looks like 
+\newline 
+http://yourserver.com/profile.php?userid=
+\newline 
+applet will append the user ID to this url and open it in a new window
+\layout Itemize
+
+
+\series bold 
+profileURLTarget
+\series default 
+ - target window where profile will be opened
+\layout Itemize
+
+
+\series bold 
+client_pull_delay
+\series default 
+ - delay (client_pull_delay*5 seconds), which sets the delay between requests
+ to server
+\layout Itemize
+
+
+\series bold 
+client_ignore_timeout
+\series default 
+ - in seconds, shows how many time the messages from user, which just was
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+declined
+\begin_inset Quotes erd
+\end_inset 
+
+ to start chat, will not be accepted from the current user.
+\layout Itemize
+
+maxsessions - controls how many concurrent chat windows will have user at
+ the same time
+\layout Section
+
+Installation
+\layout Standard
+
+Unpack ZIP file, and place the 
+\series bold 
+server
+\series default 
+ directory somewhere on server, where you will use it, and move contents
+ of
+\series bold 
+ client
+\series default 
+ directory directory, accessible from WEB.
+ Configure 
+\series bold 
+runtime.props 
+\series default 
+to match your system and start server with 
+\series bold 
+recycle.sh
+\series default 
+.
+ Then place client applet tag to some of your pages, create your own 
+\series bold 
+skin.zip
+\series default 
+ and enjoy ;).
+\layout Section
+
+Troubleshooting
+\layout Standard
+
+There will be no problems installing and deploying messenger on most systems,
+ if you have troubles - please report to 
+\series bold 
+eugenydzh@jdevelop.com
+\series default 
+, you will get support within 24 hours.
+\the_end

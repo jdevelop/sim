@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<project name="SIM server" default="all" basedir=".">
+  <taskdef name="proguard" classname="proguard.ant.ProGuardTask"
+      classpath="/home/bofh/proguard3.4/lib/proguard.jar" />
+
+  <property file="build.properties" />
+
+  <path id="classpath">
+    <pathelement location="mysql.jar" />
+
+    <pathelement location="xmlrpc-1.2-b1.jar" />
+
+    <pathelement location="${JAVA_HOME}/jre/lib/javaplugin.jar" />
+
+    <pathelement location="${RETROGUARD_HOME}/retroguard.jar" />
+
+    <fileset dir="${JAKARTA_HOME}" includes="**/*.jar" />
+  </path>
+
+  <target name="buildall">
+    <echo message="Build all classes ... " />
+
+    <mkdir dir="${build}/classes" />
+
+    <javac srcdir="src" destdir="${build}/classes" target="1.1" source="1.1"
+    debug="${debug}">
+      <exclude name="**/tests/*.java" />
+      <classpath refid="classpath" />
+    </javac>
+  </target>
+
+  <target name="uncompress">
+    <unjar src="${build}/proj.jar" dest="${build}/classes" />
+  </target>
+
+  <target name="all">
+    <antcall target="debug" />
+
+    <move file="${build}/client.jar"
+    tofile="${build}/client0.jar" />
+
+    <move file="${build}/server.jar"
+    tofile="${build}/server0.jar" />
+
+    <delete dir="${build}/classes/com/" />
+
+    <echo message="Obfuscating code" />
+
+    <proguard>
+	-libraryjar /usr/local/jdk1.4.2/jre/lib/rt.jar 
+	-injar  client0.jar 
+	-outjar client.jar 
+	-defaultpackage na 
+	-keep public class com.jdevelop.sim.gui.AWT.Main { 
+	    public void init();
+	    public void start(); 
+	    public void stop(); 
+	    public void destroy();
+	    public void logOut(); 
+	    public void openWindow(java.lang.String,java.lang.String); 
+	    public void openBuddyList(); 
+	    public void ignoreUser(java.lang.String);
+	    }
+    </proguard>
+
+    <proguard>
+	-libraryjar /usr/local/jdk1.4.2/jre/lib/rt.jar
+	-libraryjar /usr/local/jakarta-tomcat4.1/common/lib/servlet.jar
+	-injar server0.jar 
+	-outjar server.jar 
+	-defaultpackage na 
+	-keep public class com.jdevelop.sim.server.LiveSIMServer { 
+	    public static void main(java.lang.String[]); 
+	} 
+	-keep public class com.jdevelop.sim.modules.xmlrpc.XmlRpcChatModule { 
+	    public java.util.Vector onlineMembers(java.util.Vector); 
+	    public java.util.Vector getAllMembers();
+	    public void block(java.lang.String,java.lang.String);
+	    public void unblock(java.lang.String,java.lang.String);
+	} 
+	-printseed
+    </proguard>
+
+    <echo message="Cleaning..." />
+
+    <delete>
+      <fileset dir="." includes="client0.jar,server0.jar" />
+    </delete>
+
+    <delete dir="${build}/classes" />
+  </target>
+
+  <target name="debug">
+    <antcall target="buildall" />
+
+    <delete>
+      <fileset dir="." includes="client.jar,server.jar" />
+    </delete>
+
+    <echo message="Jarring client" />
+
+    <jar basedir="${build}/classes/" jarfile="client.jar"
+    includes="com/jdevelop/sim/events/**/*.class, com/jdevelop/sim/connectors/**/*.class, com/jdevelop/sim/gui/**/*.class, com/jdevelop/sim/modules/Message.class" />
+
+    <echo message="Jarring server" />
+
+    <jar basedir="${build}/classes/" jarfile="server.jar"
+    includes="com/jdevelop/sim/server/**/*.class, com/jdevelop/sim/events/**/*.class, com/jdevelop/sim/modules/**/*.class, com/jdevelop/sim/connectors/**/*.class" />
+
+    <delete dir="${build}/classes" />
+  </target>
+</project>
+
