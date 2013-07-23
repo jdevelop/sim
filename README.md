@@ -1,6 +1,8 @@
 Site Instant Messenger 4.4.1 installation instructions
+====
 
 Eugeny N Dzhurinsky, JDevelop.com, 2003-2004
+----
 
 1 Pre-requirements
 
@@ -192,18 +194,18 @@ not be able to connect to any other server - it is
 prohibited by the JVM.
 Sample script for banners:
 
-<?php 
+        <?php 
 
-header('Content-type: text/plain'); 
+        header('Content-type: text/plain'); 
 
-// sending the URL
+        // sending the URL
 
-echo 'http://jdevelop.com/sim'."\n"; 
+        echo 'http://jdevelop.com/sim'."\n"; 
 
-//sending the image URL
+        //sending the image URL
 
-echo 'http://simv4.priv/jdevelopbanner.jpg'."\n"; 
-?> 
+        echo 'http://simv4.priv/jdevelopbanner.jpg'."\n"; 
+        ?> 
 
 
 Now about skin.zip file. This file contains skin. Skin 
